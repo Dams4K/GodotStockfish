@@ -6,7 +6,7 @@ func _ready() -> void:
 	var stock = GodotStockfish.new()
 	stock.on_bestmove.connect(_on_bestmove)
 	#
-	stock.set_position("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", ["e2e4", "d7d6"])
+	stock.set_position("rnbqkbnr/ppp1pppp/3p4/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq d3 0 2", ["e7e5"])
 	$Label.text = stock.print_eval()
 	stock.go(20)
 
