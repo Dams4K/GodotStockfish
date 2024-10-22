@@ -15,7 +15,7 @@
 using namespace godot;
 
 void GodotStockfish::_bind_methods() {
-    ClassDB::bind_method(D_METHOD("init_engine"), &GodotStockfish::init_engine);
+    ClassDB::bind_method(D_METHOD("print_eval"), &GodotStockfish::print_eval);
     ClassDB::bind_method(D_METHOD("set_position", "fen", "moves"), &GodotStockfish::set_position);
 }
 
@@ -41,6 +41,10 @@ void GodotStockfish::set_position(String fen, TypedArray<String> moves) {
     }
 
     engine.set_position(String_to_string(fen), v_moves);
+}
+
+void GodotStockfish::print_eval() {
+    UtilityFunctions::print(String(engine.trace_eval().c_str()));
 }
 
 String GodotStockfish::init_engine() {

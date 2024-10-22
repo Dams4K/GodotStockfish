@@ -26,7 +26,7 @@ public:
     GodotStockfish();
     ~GodotStockfish();
 
-
+    void print_eval();
     void set_position(String fen, TypedArray<String> moves);
     String init_engine();
 };
