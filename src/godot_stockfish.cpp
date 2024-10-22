@@ -36,10 +36,13 @@ String GodotStockfish::string_to_String(std::string str) {
 
 
 void GodotStockfish::on_bestmove(std::string_view bestmove, std::string_view ponder) {
-    std::cout << "bestmove " << bestmove;
-    if (!ponder.empty())
-        std::cout << " ponder " << ponder;
-    std::cout << std::endl;
+    // std::cout << "bestmove " << bestmove;
+    // if (!ponder.empty())
+    //     std::cout << " ponder " << ponder;
+    // std::cout << std::endl;
+    String bm = string_to_String(std::string{bestmove});
+    String p = string_to_String(std::string{ponder});
+    UtilityFunctions::prints("bestmove:", bm, "ponder:", p);
 
 }
 

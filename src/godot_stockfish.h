@@ -16,8 +16,8 @@ private:
     Stockfish::Engine engine;
 
     // Just a tool
-    std::string String_to_string(String str);
-    String string_to_String(std::string str);
+    static std::string String_to_string(String str);
+    static String string_to_String(std::string str);
 
     static void on_update_no_moves(const Stockfish::Engine::InfoShort& info);
     static void on_update_full(const Stockfish::Engine::InfoFull& info, bool showWDL);
