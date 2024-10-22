@@ -13,6 +13,10 @@ void initialize_stockfish_module(ModuleInitializationLevel p_level) {
 		return;
 	}
 
+
+    Stockfish::Bitboards::init();
+    Stockfish::Position::init();
+
 	GDREGISTER_CLASS(GodotStockfish);
 }
 
