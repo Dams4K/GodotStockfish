@@ -22,7 +22,7 @@ private:
     static void on_update_no_moves(const Stockfish::Engine::InfoShort& info);
     static void on_update_full(const Stockfish::Engine::InfoFull& info, bool showWDL);
     static void on_iter(const Stockfish::Engine::InfoIter& info);
-    static void on_bestmove(std::string_view bestmove, std::string_view ponder);
+    void on_bestmove(std::string_view bestmove, std::string_view ponder);
 
 protected:
     static void _bind_methods();

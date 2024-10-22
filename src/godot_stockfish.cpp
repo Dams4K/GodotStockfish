@@ -17,6 +17,8 @@
 using namespace godot;
 
 void GodotStockfish::_bind_methods() {
+    ADD_SIGNAL(MethodInfo("on_bestmove", PropertyInfo(Variant::STRING, "bestmove"), PropertyInfo(Variant::STRING, "ponder")));
+
     ClassDB::bind_method(D_METHOD("set_position", "fen", "moves"), &GodotStockfish::set_position);
     ClassDB::bind_method(D_METHOD("go", "depth"), &GodotStockfish::go);
 
@@ -44,6 +46,7 @@ void GodotStockfish::on_bestmove(std::string_view bestmove, std::string_view pon
     String p = string_to_String(std::string{ponder});
     UtilityFunctions::prints("bestmove:", bm, "ponder:", p);
 
+    emit_signal("on_bestmove", bm, p);
 }
 
 
@@ -101,7 +104,10 @@ GodotStockfish::GodotStockfish() {
     engine.set_on_update_no_moves([](const auto& i) { on_update_no_moves(i); });
     engine.set_on_update_full(
       [this](const auto& i) { on_update_full(i, engine.get_options()["UCI_ShowWDL"]); });
-    engine.set_on_bestmove([](const auto& bm, const auto& p) { on_bestmove(bm, p); });
+    
+    engine.set_on_bestmove([this](const auto& bm, const auto& p) { on_bestmove(bm, p); });
+    
+    // engine.set_on_bestmove(on_bestmove);
 }
 
 GodotStockfish::~GodotStockfish() {
