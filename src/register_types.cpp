@@ -6,6 +6,8 @@
 #include <godot_cpp/core/defs.hpp>
 #include <godot_cpp/godot.hpp>
 
+#include <godot_cpp/classes/engine.hpp>
+
 using namespace godot;
 
 void initialize_stockfish_module(ModuleInitializationLevel p_level) {
@@ -17,13 +19,17 @@ void initialize_stockfish_module(ModuleInitializationLevel p_level) {
     Stockfish::Bitboards::init();
     Stockfish::Position::init();
 
+	// GDREGISTER_ABSTRACT_CLASS(GodotStockfish);
 	GDREGISTER_CLASS(GodotStockfish);
+
+	Engine::get_singleton()->register_singleton("GodotStockfish", memnew(GodotStockfish));
 }
 
 void uninitialize_stockfish_module(ModuleInitializationLevel p_level) {
 	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
 		return;
 	}
+	Engine::get_singleton()->unregister_singleton("GodotStockfish");
 }
 
 extern "C" {

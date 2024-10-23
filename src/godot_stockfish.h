@@ -1,7 +1,7 @@
 #ifndef STOCKFISH_H
 #define STOCKFISH_H
 
-#include <godot_cpp/classes/node.hpp>
+#include <godot_cpp/classes/object.hpp>
 
 #include "engine.h"
 #include "misc.h"
@@ -9,8 +9,10 @@
 
 namespace godot {
 
-class GodotStockfish : public Node {
-    GDCLASS(GodotStockfish, Node)
+class GodotStockfish : public Object {
+    GDCLASS(GodotStockfish, Object)
+
+    static GodotStockfish *singleton;
 
 private:
     Stockfish::Engine engine;
@@ -30,6 +32,8 @@ protected:
 public:
     GodotStockfish();
     ~GodotStockfish();
+
+    static GodotStockfish *get_singleton();
 
     void go(int depth);
     void set_position(String fen, TypedArray<String> moves);

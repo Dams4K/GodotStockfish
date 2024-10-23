@@ -16,6 +16,43 @@
 
 using namespace godot;
 
+
+GodotStockfish *GodotStockfish::singleton = nullptr;
+
+// Copy past of displayer_server.cpp
+GodotStockfish *GodotStockfish::get_singleton() {
+	return singleton;
+}
+
+
+GodotStockfish::GodotStockfish() {
+    singleton = this;
+
+    engine.get_options().add_info_listener([](const std::optional<std::string>& str) {
+        if (str.has_value()) {
+            UtilityFunctions::print("Value");
+        }
+            // UtilityFunctions::print(string_to_String((std::string) str));
+    });
+
+    engine.set_on_iter([](const auto& i) { on_iter(i); });
+    engine.set_on_update_no_moves([](const auto& i) { on_update_no_moves(i); });
+    engine.set_on_update_full(
+      [this](const auto& i) { on_update_full(i, engine.get_options()["UCI_ShowWDL"]); });
+    
+    engine.set_on_bestmove([](const auto& bm, const auto& p) { GodotStockfish::get_singleton()->on_bestmove(bm, p); });
+    
+    // engine.set_on_bestmove(on_bestmove);
+}
+
+GodotStockfish::~GodotStockfish() {
+    engine.stop();
+    if (singleton == this) {
+		ClassDB::_unregister_engine_singleton(GodotStockfish::get_class_static());
+		singleton = nullptr;
+	}
+}
+
 void GodotStockfish::_bind_methods() {
     ADD_SIGNAL(MethodInfo("on_bestmove", PropertyInfo(Variant::STRING, "bestmove"), PropertyInfo(Variant::STRING, "ponder")));
 
@@ -46,7 +83,8 @@ void GodotStockfish::on_bestmove(std::string_view bestmove, std::string_view pon
     String p = string_to_String(std::string{ponder});
     UtilityFunctions::prints("bestmove:", bm, "ponder:", p);
 
-    emit_signal("on_bestmove", bm, p);
+    // emit_signal("on_bestmove", bm, p);
+    call_deferred("emit_signal", "on_bestmove", bm, p);
 }
 
 
@@ -90,29 +128,6 @@ void GodotStockfish::on_iter(const Stockfish::Engine::InfoIter& info) {
     // sync_cout << ss.str() << sync_endl;
 }
 
-
-
-GodotStockfish::GodotStockfish() {
-    engine.get_options().add_info_listener([](const std::optional<std::string>& str) {
-        if (str.has_value()) {
-            UtilityFunctions::print("Value");
-        }
-            // UtilityFunctions::print(string_to_String((std::string) str));
-    });
-
-    engine.set_on_iter([](const auto& i) { on_iter(i); });
-    engine.set_on_update_no_moves([](const auto& i) { on_update_no_moves(i); });
-    engine.set_on_update_full(
-      [this](const auto& i) { on_update_full(i, engine.get_options()["UCI_ShowWDL"]); });
-    
-    engine.set_on_bestmove([this](const auto& bm, const auto& p) { on_bestmove(bm, p); });
-    
-    // engine.set_on_bestmove(on_bestmove);
-}
-
-GodotStockfish::~GodotStockfish() {
-    engine.stop();
-}
 
 void GodotStockfish::set_position(String fen, TypedArray<String> moves) {
     std::vector<std::string> v_moves;
