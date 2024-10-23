@@ -49,6 +49,7 @@ Value evaluate(const NNUE::Networks&          networks,
                const Position&                pos,
                Eval::NNUE::AccumulatorCaches& caches,
                int                            optimism);
+float get_evaluation(Position& pos, const Eval::NNUE::Networks& networks);
 }  // namespace Eval
 
 }  // namespace Stockfish

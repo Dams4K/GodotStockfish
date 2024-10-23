@@ -35,8 +35,12 @@ public:
 
     static GodotStockfish *get_singleton();
 
+    // Options
+    void set_multipv(int number);
+
     void go(int depth);
     void set_position(String fen, TypedArray<String> moves);
+    float get_evaluation();
     
     String print_eval();
     String init_engine();

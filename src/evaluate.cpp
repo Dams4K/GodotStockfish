@@ -126,4 +126,14 @@ std::string Eval::trace(Position& pos, const Eval::NNUE::Networks& networks) {
     return ss.str();
 }
 
+float Eval::get_evaluation(Position& pos, const Eval::NNUE::Networks& networks) {
+    auto caches = std::make_unique<Eval::NNUE::AccumulatorCaches>(networks);
+    auto [psqt, positional] = networks.big.evaluate(pos, &caches->big);
+    Value v                 = psqt + positional;
+    v = evaluate(networks, pos, *caches, VALUE_ZERO);
+    v = pos.side_to_move() == WHITE ? v : -v;
+
+    return 0.01 * UCIEngine::to_cp(v, pos);
+}
+
 }  // namespace Stockfish

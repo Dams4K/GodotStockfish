@@ -273,6 +273,16 @@ std::string Engine::trace_eval() const {
     return Eval::trace(p, *networks);
 }
 
+float Engine::get_evaluation() const {
+    StateListPtr trace_states(new std::deque<StateInfo>(1));
+    Position     p;
+    p.set(pos.fen(), options["UCI_Chess960"], &trace_states->back());
+
+    verify_networks();
+
+    return Eval::get_evaluation(p, *networks);
+}
+
 
 const OptionsMap& Engine::get_options() const { return options; }
 OptionsMap&       Engine::get_options() { return options; }

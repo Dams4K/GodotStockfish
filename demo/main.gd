@@ -1,15 +1,13 @@
 extends HBoxContainer
 
-
 func _ready() -> void:
-	$Label2.text = "qsdqsd"
-	#var stock = GodotStockfish.new()
-	#GodotStockfish.print_eval()
 	GodotStockfish.on_bestmove.connect(_on_bestmove)
-	##
-	GodotStockfish.set_position("rnbqkbnr/ppp1pppp/3p4/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq d3 0 2", ["e7e5"])
+	
+	GodotStockfish.set_multipv(2)
+	GodotStockfish.set_position("r1b2rk1/pppq1ppp/3p1n2/3Np3/1PBbP3/P2P4/R1PBQPPP/4K2R w K - 4 12", [])
 	$Label.text = GodotStockfish.print_eval()
-	GodotStockfish.go(20)
+	GodotStockfish.go(15)
+	print("Evaluation: ", GodotStockfish.get_evaluation())
 
 
 func _on_bestmove(bestmove: String, ponder: String):

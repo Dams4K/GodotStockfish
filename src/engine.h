@@ -93,6 +93,7 @@ class Engine {
     // utility functions
 
     std::string trace_eval() const;
+    float get_evaluation() const;
 
     const OptionsMap& get_options() const;
     OptionsMap&       get_options();
