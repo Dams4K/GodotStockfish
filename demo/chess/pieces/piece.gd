@@ -19,6 +19,7 @@ const ICON_FOLDER = "res://assets/textures/pieces/"
 
 var sprite2d: Sprite2D
 
+# i really don't like this solution
 static var directions = {
 	PieceName.BISHOP: func(piece_color: PieceColor, piece_pos: Vector2i, board_size: Vector2i, matrix: Array[Array]):
 		var m_possible: Array[Vector2i] = []
@@ -26,12 +27,13 @@ static var directions = {
 		
 		for d_p in d_possible:
 			var pos = piece_pos
-			while pos.x >= 0 and pos.y >= 0 and pos.x < board_size.x and pos.y < board_size.y:
+			while Board.is_inside_board(pos, board_size):
 				pos += d_p
-				if not(pos.x >= 0 and pos.y >= 0 and pos.x < board_size.x and pos.y < board_size.y):
+				if not(Board.is_inside_board(pos, board_size)):
 					break
-				if matrix[pos.y][pos.x] != null and matrix[pos.y][pos.x].piece_color == piece_color:
-					# a piece we can take
+				if matrix[pos.y][pos.x] != null:
+					if matrix[pos.y][pos.x].piece_color != piece_color:
+						m_possible.append(pos)
 					break
 				m_possible.append(pos)
 		
@@ -45,11 +47,35 @@ static var directions = {
 		
 		for d_p in d_possible:
 			var pos = piece_pos + d_p
-			if not(pos.x >= 0 and pos.y >= 0 and pos.x < board_size.x and pos.y < board_size.y):
+			if not(Board.is_inside_board(pos, board_size)):
 				continue
-			if matrix[pos.y][pos.x] == null:
+			if matrix[pos.y][pos.x] == null or matrix[pos.y][pos.x].piece_color != piece_color:
 				m_possible.append(pos)
 		
+		return m_possible,
+	PieceName.KNIGHT: func(piece_color: PieceColor, piece_pos: Vector2i, board_size: Vector2i, matrix: Array[Array]):
+		var m_possible: Array[Vector2i] = []
+		var d_possible: Array[Vector2i] = [
+			2*Vector2i.LEFT+Vector2i.UP,	2*Vector2i.RIGHT+Vector2i.UP, 	2*Vector2i.UP+Vector2i.LEFT, 	2*Vector2i.DOWN+Vector2i.LEFT,
+			2*Vector2i.LEFT+Vector2i.DOWN,	2*Vector2i.RIGHT+Vector2i.DOWN, 2*Vector2i.UP+Vector2i.RIGHT, 	2*Vector2i.DOWN+Vector2i.RIGHT,
+		]
+		
+		for d_p in d_possible:
+			var pos = piece_pos + d_p
+			if not(Board.is_inside_board(pos, board_size)):
+				continue
+			if matrix[pos.y][pos.x] == null or matrix[pos.y][pos.x].piece_color != piece_color:
+				m_possible.append(pos)
+				
+		return m_possible,
+	PieceName.PAWN: func(piece_color: PieceColor, piece_pos: Vector2i, board_size: Vector2i, matrix: Array[Array]):
+		var m_possible: Array[Vector2i] = []
+		return m_possible,
+	PieceName.QUEEN: func(piece_color: PieceColor, piece_pos: Vector2i, board_size: Vector2i, matrix: Array[Array]):
+		var m_possible: Array[Vector2i] = []
+		return m_possible,
+	PieceName.ROOK: func(piece_color: PieceColor, piece_pos: Vector2i, board_size: Vector2i, matrix: Array[Array]):
+		var m_possible: Array[Vector2i] = []
 		return m_possible
 }
 

@@ -12,6 +12,8 @@ var matrix: Array[Array]
 
 var pieces: Node2D
 
+var available_positions: Array[Vector2i] = []
+
 func _ready() -> void:
 	pieces = Node2D.new()
 	pieces.name = "Pieces"
@@ -69,9 +71,13 @@ func select_piece(pos: Vector2i):
 	if piece == null:
 		return
 	var f: Callable = Piece.directions[piece.piece_name]
-	print(f.call(piece.piece_color, pos, board_size, matrix))
+	available_positions = f.call(piece.piece_color, pos, board_size, matrix)
+	queue_redraw()
 
 #endregion
+
+static func is_inside_board(pos: Vector2i, board_size: Vector2i):
+	return pos.x >= 0 and pos.y >= 0 and pos.x < board_size.x and pos.y < board_size.y
 
 #region INTERFACE
 func _draw() -> void:
@@ -80,6 +86,9 @@ func _draw() -> void:
 			var square_rect = Rect2i(Vector2i(i, j) * square_size, square_size)
 			var color = white_square if (i+j) % 2 == 0 else black_square
 			draw_rect(square_rect, color, true)
+	
+	for pos in available_positions:
+		draw_circle(pos*square_size + square_size/2, 12, Color.DIM_GRAY, true)
 
 
 func set_board_size(v: Vector2i):
