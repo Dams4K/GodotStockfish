@@ -19,6 +19,10 @@ config/icon="res://icon.svg"
 
 Global="*res://global.gd"
 
+[display]
+
+window/stretch/mode="canvas_items"
+
 [rendering]
 
 textures/vram_compression/import_etc2_astc=true

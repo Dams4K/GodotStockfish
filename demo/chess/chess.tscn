@@ -1,8 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://dasged53xka5f"]
+[gd_scene load_steps=3 format=3 uid="uid://dasged53xka5f"]
 
 [ext_resource type="Script" path="res://chess/board.gd" id="1_dyq3m"]
+[ext_resource type="Script" path="res://chess/chess.gd" id="1_lve36"]
 
 [node name="Chess" type="Node2D"]
+script = ExtResource("1_lve36")
 
 [node name="Board" type="Node2D" parent="."]
 script = ExtResource("1_dyq3m")
