@@ -68,5 +68,6 @@
         "typeinfo": "cpp",
         "variant": "cpp"
     },
-    "search.useIgnoreFiles": false
+    "search.useIgnoreFiles": false,
+    "cmake.ignoreCMakeListsMissing": true
 }

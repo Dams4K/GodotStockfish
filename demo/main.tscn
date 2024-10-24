@@ -2,7 +2,8 @@
 
 [ext_resource type="Script" path="res://main.gd" id="1_6t7to"]
 
-[node name="Main" type="HBoxContainer"]
+[node name="Main" type="Control"]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -10,14 +11,19 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_6t7to")
 
-[node name="Label" type="Label" parent="."]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 1
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="Label2" type="Label" parent="."]
+[node name="ProgressBar" type="ProgressBar" parent="HBoxContainer"]
+custom_minimum_size = Vector2(32, 0)
 layout_mode = 2
-size_flags_horizontal = 3
 size_flags_vertical = 1
-horizontal_alignment = 1
-vertical_alignment = 1
+min_value = -10.0
+max_value = 10.0
+fill_mode = 2
+show_percentage = false
