@@ -1,7 +1,7 @@
 extends Node2D
 
 #const START_FEN: StringName = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
-const START_FEN = "r2qk1nr/ppp2ppp/2npb3/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQK2R w KQkq - 1 6"
+const START_FEN = "r2qk2r/p2n1ppp/1p2p3/1Q1NPn2/5P2/5N2/PPP3PP/2KR3R b kq - 0 14"
 
 @onready var board: Board = $Board
 

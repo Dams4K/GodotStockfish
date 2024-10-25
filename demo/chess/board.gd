@@ -12,7 +12,7 @@ var matrix: Array[Array]
 
 var pieces: Node2D
 
-var available_positions: Array[Vector2i] = []
+var available_moves: Array[Move] = []
 
 func _ready() -> void:
 	pieces = Node2D.new()
@@ -71,7 +71,7 @@ func select_piece(pos: Vector2i):
 	if piece == null:
 		return
 	var f: Callable = Piece.directions[piece.piece_name]
-	available_positions = f.call(piece.piece_color, pos, board_size, matrix)
+	available_moves = f.call(piece.piece_color, pos, board_size, matrix)
 	queue_redraw()
 
 #endregion
@@ -87,8 +87,11 @@ func _draw() -> void:
 			var color = white_square if (i+j) % 2 == 0 else black_square
 			draw_rect(square_rect, color, true)
 	
-	for pos in available_positions:
-		draw_circle(pos*square_size + square_size/2, 12, Color.DIM_GRAY, true)
+	for move in available_moves:
+		var c = Color.DIM_GRAY
+		if move is MoveTake:
+			c = Color.RED
+		draw_circle(move.to*square_size + square_size/2, 12, c, true)
 
 
 func set_board_size(v: Vector2i):
