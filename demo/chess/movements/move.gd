@@ -22,3 +22,8 @@ func _to_string() -> String:
 		l.append("%s: %s" % [attr, get(attr)])
 	
 	return "<%s: [%s]>" % [_get_classname(),  ", ".join(l)]
+
+func proceed(matrix: Array[Array]):
+	matrix[from.y][from.x] = null
+	matrix[to.y][to.x] = piece
+	

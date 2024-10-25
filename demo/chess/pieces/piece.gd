@@ -80,6 +80,28 @@ static var directions = {
 		var m_possible: Array[Move] = []
 		var piece: Piece = matrix[piece_pos.y][piece_pos.x]
 		
+		# Moving
+		var pawn_direction = Vector2i.DOWN if piece.piece_color == PieceColor.BLACK else Vector2i.UP
+		var is_start_pos = piece_pos.y == 1 if piece_color == PieceColor.BLACK else piece_pos.y == board_size.y-2
+		
+		var front: Vector2i = piece_pos+pawn_direction
+		if Board.is_inside_board(front, board_size):
+			if matrix[front.y][front.x] == null:
+				m_possible.append(Move.new(piece, piece_pos, front))
+				var jump_front: Vector2i = piece_pos+2*pawn_direction
+				if is_start_pos and matrix[jump_front.y][jump_front.x] == null:
+					m_possible.append(Move.new(piece, piece_pos, jump_front))
+		
+		# Attacking
+		var attacks: Array[Vector2i] = [piece_pos+pawn_direction+Vector2i.LEFT, piece_pos+pawn_direction+Vector2i.RIGHT]
+		for attack_pos in attacks:
+			if not Board.is_inside_board(attack_pos, board_size):
+				continue
+			
+			var piece_attacked: Piece = matrix[attack_pos.y][attack_pos.x]
+			if piece_attacked != null and piece_attacked.piece_color != piece.piece_color:
+				m_possible.append(MoveTake.new(piece, piece_pos, attack_pos, piece_attacked))
+		
 		return m_possible,
 	PieceName.QUEEN: func(piece_color: PieceColor, piece_pos: Vector2i, board_size: Vector2i, matrix: Array[Array]):
 		var m_possible: Array[Move] = directions[PieceName.BISHOP].call(piece_color, piece_pos, board_size, matrix)

@@ -2,7 +2,7 @@
 extends Node2D
 class_name Board
 
-var matrix: Array[Array]
+var matrix: Array[Array] : set = set_matrix
 
 @export var board_size := Vector2i(8, 8) : set = set_board_size
 @export var square_size := Vector2i(64, 64) : set = set_square_size
@@ -12,6 +12,7 @@ var matrix: Array[Array]
 
 var pieces: Node2D
 
+var piece_selected: Piece
 var available_moves: Array[Move] = []
 
 func _ready() -> void:
@@ -63,16 +64,46 @@ func _input(event: InputEvent) -> void:
 			var square_pos := Vector2i(event.position)/square_size
 			var is_valid_square := square_pos.x < board_size.x and square_pos.y < board_size.y
 			if is_valid_square:
-				select_piece(square_pos)
+				select_square(square_pos)
+
+func select_square(pos: Vector2i):
+	print(matrix[pos.y][pos.x])
+	if matrix[pos.y][pos.x] == null:
+		move_piece(pos)
+	else:
+		select_piece(pos)
+	
+
+func move_piece(pos: Vector2i):
+	if piece_selected == null:
+		return
+	
+	for move in available_moves:
+		if pos == move.to:
+			move.proceed(matrix)
+			break
+	
+	available_moves.clear()
+	update_board()
 
 func select_piece(pos: Vector2i):
-	var piece: Piece = matrix[pos.y][pos.x]
-	print(pos)
-	if piece == null:
-		return
-	var f: Callable = Piece.directions[piece.piece_name]
-	available_moves = f.call(piece.piece_color, pos, board_size, matrix)
+	piece_selected = matrix[pos.y][pos.x]
+	
+	var f: Callable = Piece.directions[piece_selected.piece_name]
+	available_moves = f.call(piece_selected.piece_color, pos, board_size, matrix)
 	queue_redraw()
+
+func set_matrix(value: Array[Array]):
+	matrix = value
+	update_board()
+
+func update_board():
+	queue_redraw()
+	for j in range(len(matrix)):
+		for i in range(len(matrix[j])):
+			var piece: Piece = matrix[j][i]
+			if piece:
+				piece.position = Vector2i(i, j) * square_size + (square_size - Vector2i.ONE)/2
 
 #endregion
 
